@@ -136,7 +136,7 @@ function draw() {
 
     // 绘制花朵
     for (let flower of flowers) {
-      if (!flower.ifplanted) {
+      if (flower.ifplanted == false) {
         console.log(flower.id + " + " + socket.id);
         if(flower.id == socket.id){
                   flower.x = mouseX;
@@ -154,7 +154,7 @@ function draw() {
     // 计算摆动角度和控制偏移量
     let sway = sin(frameCount *flower.frequency + flower.x * 0.1) * flower.force; // Subtle sway angle (increase sway effect)
     let controlOffset = sway * 1.5; // Adjust the curvature amount
-    let isFlowerPlanted = flower.ifplanted;
+    //let isFlowerPlanted = flower.ifplanted;
 
          //console.log(flower.frequency);
     // 绘制花茎部分
@@ -318,7 +318,8 @@ function mousePressed() {
   // }
   
   if(canPlant){
-     console.log(isFlowerPlanted+ " + "+currentFlower);
+     //console.log(isFlowerPlanted+ " + "+currentFlower);
+    //console.log(canPlant);
   if (!isFlowerPlanted&&currentFlower) {
     setTimeout(10);
     // Fix the flower's position
