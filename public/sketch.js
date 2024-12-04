@@ -12,6 +12,15 @@ let currentFlower = null; // 当前正在放置的花朵
 let isFlowerPlanted = false; // 标记是否已经固定花朵
 let spanning = false;
 let canPlant = false;
+let bee = {
+  x: 0,
+  y: 200,
+  size: 50,
+  speed: 2,
+  wingAngle: 0,
+  wingFlapSpeed: 0.2,
+  visible: true,
+};
 
 function preload() {
   bgImage = loadImage('https://cdn.glitch.global/8c93b6c9-9dc6-4089-8240-b26b2c58c581/pots_v05.png?v=1730724313078');
@@ -215,6 +224,11 @@ function draw() {
     drawShovel(span.x,span.y);
   }
   drawSprites(); // 通过 p5.play 的 drawSprites 来绘制所有精
+  
+  if(bee.visible){
+      drawBee(bee.x, bee.y, bee.size, bee.wingAngle);
+      updateBee();
+  }
 }
 
 
@@ -415,6 +429,51 @@ function drawWaterParticles() {
     fill(173, 216, 230,150);
     noStroke();
     ellipse(particle.x, particle.y, particle.size, particle.size);
+  }
+}
+
+function drawBee(x, y, size, wingAngle) {
+  // Body
+  fill(255, 204, 0); // Yellow
+  ellipse(x, y, size, size * 0.9); // Oval body
+
+  // Stripes
+  fill(0);
+  rect(x - size*0.35 , y - size * 0.3, size*0.8, size * 0.05);
+  rect(x - size*0.45 , y - size * 0.15, size*0.9, size * 0.05);
+  rect(x - size*0.45, y + size * 0.01, size * 0.9, size * 0.05);
+  rect(x - size*0.45, y + size * 0.18, size * 0.9, size * 0.05);
+
+
+  // Wings
+  fill(255, 255, 255, 150); // Transparent white
+  push();
+  translate(x, y);
+  rotate(wingAngle);
+  ellipse(size * 0.3, -size * 0.4, size * 0.6, size * 0.3); // Right wing
+  rotate(-2 * wingAngle);
+  ellipse(-size * 0.3, -size * 0.4, size * 0.6, size * 0.3); // Left wing
+  pop();
+
+  // Face
+  fill(255);
+  ellipse(x + size * 0.5, y - size * 0.2, size * 0.48); // Eye
+  ellipse(x + size * 0.2, y - size * 0.2, size * 0.5); // Eye
+  
+  fill(0);
+  ellipse(x + size * 0.6, y - size * 0.2, size * 0.1);
+  ellipse(x + size * 0.3, y - size * 0.2, size * 0.1);
+}
+
+function updateBee() {
+  // Move the bee across the canvas
+  bee.x += bee.speed;
+  bee.wingAngle = sin(frameCount * bee.wingFlapSpeed) * QUARTER_PI; // Flap wings
+
+  // Reset position if it goes off-screen
+  if (bee.x - bee.size / 2 > width) {
+    bee.x = -bee.size;
+    bee.y = random(50, height - 50);
   }
 }
 
