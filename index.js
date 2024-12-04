@@ -90,6 +90,7 @@ io.sockets.on('connection', function (socket) {
        
 
         io.sockets.emit('msg', newFlower);  // 广播新的花朵给所有客户端
+        console.log("index.js msg on");
         
     });
     // Listen for this client to disconnect

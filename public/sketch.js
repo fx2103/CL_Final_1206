@@ -32,24 +32,24 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight).parent('sketch-holder');
-  //world.gravity.y = 9.8;
   image(bgImage, 0, 0, width, height);
-  
+
   // 检查 socket 是否存在
   if (window.socket) {
-    
+    console.log("initialize success");
     socket = window.socket;
-    socketInitialized = true;
     socket.on('msg', (data) => {
       createNewFlower(data);    
             canPlant = true;
-      console.log("msg on");
     });
  
     socket.on('initialFlowers', (data) => {
-    flowers = data; // Load initial flowers from server
-    //createNewFlower(data); 
-    console.log("initialflowers on");
+      
+      flowers = data; // Load initial flowers from server
+      //createNewFlower(data);  
+      
+      socketInitialized = true;
+
     });
     
     
@@ -59,10 +59,7 @@ function setup() {
       // flowers.clear;
       // createNewFlower(data);  
     })
-    console.log("initialize success");
-  } 
-  else 
-  {
+  } else {
     console.error("Socket is not defined. Ensure app.js is loaded before sketch.js.");
   }
 
@@ -105,20 +102,12 @@ function createNewFlower(data) {
   flower.force=random(5,15);
   flower.frequency=random(0.5,0.8);
   flower.canDraw = false;
-  flower.size = 1;
   if(flower.ifplanted == true)
   {
     flower.x =data.x;
     flower.y =data.y;
   }
   else{currentFlower=flower;}
-  flower.barrage = {
-  text: `${flower.name}: ${flower.message}`,
-  x: flower.x,
-  y: flower.y - 30,
-  opacity: 255
-  };
- 
   
   
   // 将绘制逻辑直接添加到 flower 的 draw 方法中
@@ -150,7 +139,7 @@ function createNewFlower(data) {
 //     ellipse(0, -25, 12, 12); // 增大花朵中心
 //     pop();
 // };
-  flower.canDraw = true;
+    flower.canDraw = true;
 
   if(flower.message!=undefined)
   {flowers.push(flower);}
@@ -162,20 +151,21 @@ function draw() {
 
     // 绘制花朵
     for (let flower of flowers) {
-      if (flower.ifplanted == false) 
-      {
-        if(flower.id == socket.id)
-        {
-        flower.x = mouseX;
+      if (flower.ifplanted == false) {
+        console.log(flower.id + " + " + socket.id);
+        if(flower.id == socket.id){
+                  flower.x = mouseX;
         flower.y = mouseY;
         currentFlower = flower;
+        //console.log("message is ",currentFlower.message);
         }
-      }}
-  }
-  else {
-    console.log("Waiting for socket to initialize...");
-  }
-    flower.draw = function () {
+
+      }
+    //console.log(flower.ifplanted);
+
+      //
+      
+       flower.draw = function () {
     // 计算摆动角度和控制偏移量
     let sway = sin(frameCount *flower.frequency + flower.x * 0.1) * flower.force; // Subtle sway angle (increase sway effect)
     let controlOffset = sway * 1.5; // Adjust the curvature amount
@@ -194,24 +184,27 @@ function draw() {
     noStroke();
     fill(255, 182, 193);
     push();
-    translate(sway, -30*flower.size); // 调整花瓣的高度
-    ellipse(-10*flower.size, -10*flower.size, 10*flower.size, 10*flower.size); // 增加花瓣的大小
-    ellipse(10*flower.size, -10*flower.size, 10*flower.size, 10*flower.size);
-    ellipse(0, -20*flower.size, 12.5*flower.size, 12.5*flower.size); // 变大中心花瓣
-    ellipse(0, -5*flower.size, 10*flower.size, 10*flower.size); // 变大底部花瓣
+    translate(sway, -60); // 调整花瓣的高度
+    ellipse(-20, -20, 20, 20); // 增加花瓣的大小
+    ellipse(20, -20, 20, 20);
+    ellipse(0, -40, 25, 25); // 变大中心花瓣
+    ellipse(0, -10, 20, 20); // 变大底部花瓣
     fill(255, 215, 0);
-    ellipse(0, -12.5*flower.size, 6*flower.size, 6*flower.size); // 增大花朵中心
+    ellipse(0, -25, 12, 12); // 增大花朵中心
     pop();
 };
-    flower.draw(); // 调用 flower 的 draw 方法绘制花朵
+      flower.draw(); // 调用 flower 的 draw 方法绘制花朵
 
       // 显示花朵的名称和消息
-  if (dist(mouseX, mouseY, flower.x, flower.y) < 25) {
+      if (dist(mouseX, mouseY, flower.x, flower.y) < 25) {
         fill(255);
         noStroke();
-        text(`${flower.name}: ${flower.message}`, flower.x, flower.y - 10);
+        text(${flower.name}: ${flower.message}, flower.x, flower.y - 10);
       }
-
+    }
+  } else {
+    console.log("Waiting for socket to initialize...");
+  }
 
   // 如果正在浇水，水壶会显示
   if (watering) {
@@ -227,45 +220,7 @@ function draw() {
     createWaterParticles();
     updateWaterParticles();
     drawWaterParticles();
-    for (let i = waterParticles.length - 1; i >= 0; i--) {
-      let particle = waterParticles[i];
-      for (let flower of flowers) {
-        if (dist(particle.x, particle.y, flower.x, flower.y) < 30) {
-          // 让花朵生长
-          flower.size = (flower.size || 1) + 0.001; // 增长花朵的大小
-          flower.size = min(flower.size, 2); // 限制最大大小为2倍
-          flower.frequency +=0.0001;
-          waterParticles.splice(i, 1); // 移除水滴
-//           if (flower.size ==2){
-//             fill(255, 255, 255, flower.barrage.opacity);
-//             noStroke();
-//             textAlign(CENTER);
-//             text(flower.barrage.text, flower.barrage.x, flower.barrage.y);
-
-//             // 弹幕逐渐上移并淡出
-//             flower.barrage.y -= 1;
-//             flower.barrage.opacity -= 2;
-
-//             // 移除淡出完成的弹幕
-//             if (flower.barrage.opacity <= 0) {
-//             flower.barrage = null;
-//             }
-//         }
-          flower.draw();
-          break;
-        }
-      }
-    }
   }
-   
-
-  // 显示花朵信息
-  if (dist(mouseX, mouseY, flower.x, flower.y) < 25) {
-    fill(255);
-    noStroke();
-    text(`${flower.name}: ${flower.message}`, flower.x, flower.y - 10);
-  }
-
   if(spanning){
     span.x=mouseX;
     span.y=mouseY;
@@ -553,3 +508,4 @@ function windowResized() {
   // 确保窗口尺寸变化时画布能适配
   resizeCanvas(windowWidth, windowHeight);
 }
+
