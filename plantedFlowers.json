@@ -68,5 +68,33 @@
     "x": 191,
     "y": 454,
     "ifplanted": true
+  },
+  {
+    "name": "97发8w",
+    "message": "23r",
+    "x": 1007,
+    "y": 158,
+    "ifplanted": true
+  },
+  {
+    "name": "97发8w",
+    "message": "23r",
+    "x": 1316,
+    "y": 381,
+    "ifplanted": true
+  },
+  {
+    "name": "123",
+    "message": "123",
+    "x": 475,
+    "y": 781,
+    "ifplanted": true
+  },
+  {
+    "name": "123",
+    "message": "123",
+    "x": 213,
+    "y": 257,
+    "ifplanted": true
   }
 ]
