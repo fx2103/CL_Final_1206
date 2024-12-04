@@ -130,10 +130,13 @@ function draw() {
     // 绘制花朵
     for (let flower of flowers) {
       if (!flower.ifplanted) {
-        flower.x = mouseX;
+        if(flower.name == ){
+                  flower.x = mouseX;
         flower.y = mouseY;
         currentFlower = flower;
         //console.log("message is ",currentFlower.message);
+        }
+
       }
     //console.log(flower.ifplanted);
 

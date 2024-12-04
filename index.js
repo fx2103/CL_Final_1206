@@ -58,7 +58,7 @@ io.sockets.on('connection', function (socket) {
  
             x: data.x,
             y: data.y,
-            ifplanted: data.ifplanted || false // 只有当 ifplanted 为 true 时才保存
+            ifplanted: data.ifplanted || false// 只有当 ifplanted 为 true 时才保存
         };
 
         // 只有当 ifplanted 为 true 时才保存花朵
