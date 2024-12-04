@@ -1,0 +1,112 @@
+/* Reset some default margin and padding */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+
+  /* Body and overall container styling */
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-image: url('https://cdn.glitch.global/8c93b6c9-9dc6-4089-8240-b26b2c58c581/bg_color.png?v=1730716777504');
+    background-size: cover; /* Adjusts the image to cover the entire area */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    font-family: Impact, sans-serif;
+  }
+  
+  /* Container for the entire welcome section */
+  #welcomePage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    max-width: 600px;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  #name-input-container,
+  #msg-input-container,
+  #dropdownMenu-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 10px 0;
+  }
+  
+  input, select {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 2px solid #c6e6c6;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: Verdana, sans-serif;
+  }
+  
+  input:focus, select:focus {
+    border-color: #4a7a4a;
+  }
+  
+  /* Button styling */
+  button {
+    padding: 12px 24px;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button:disabled {
+    background-color: #d3d3d3;
+    cursor: not-allowed;
+  }
+  
+  button:hover:not(:disabled) {
+    background-color: #45a049;
+  }
+  
+  /* Position for sketch holder */
+  #sketch-holder {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* 确保画布在最底层 */
+  }
+  
+  /* Extra styling for better readability */
+  h1 {
+    font-size: 2rem;
+    color: #4a7a4a;
+  }
+  
+  #send-button, #screenshot-button {
+    width: 150px;
+    height: 60px;
+    padding: 0.5rem 1rem;
+    background-color: #f4e9b8;
+    border: 2px solid #5b5349;
+    border-radius: 8px;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  #send-button:hover, #screenshot-button:hover {
+    background-color: #DEB887;
+  }
+  

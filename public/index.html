@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="icon" href="data:,">
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="style.css" rel="stylesheet" />
+    <title>IMA Community Garden</title>
+  </head>
+  <body>
+    <div id="welcomePage" class="page">
+      <h1>Welcome to the IMA Community Garden</h1>
+    
+      <!-- User Input Section -->
+      <div id="name-input-container">
+        <input
+          type="text"
+          class="chat-input-name"
+          id="name-input"
+          placeholder="Enter your name"
+        />
+      </div>
+      <div id="dropdownMenu-container">
+        <select id="dropdownMenu">
+          <option value="">Select a flower</option>
+          <option value="flower_01">Flower 01</option>
+          <option value="flower_02">Flower 02</option>
+          <option value="flower_03">Flower 03</option>
+          <option value="flower_04">Flower 04</option>
+          <option value="flower_05">Flower 05</option>
+        </select>
+      </div>
+      <div id="msg-input-container">
+        <input
+          type="text"
+          class="chat-input-msg"
+          id="msg-input"
+          placeholder="Leave a message here..."
+        />
+      </div>
+    
+      <!-- Enter Button -->
+      <button id="enterButton" disabled>ENTER</button>
+      <button id="visitorButton">Nan,just go to the garden</button>
+    </div>
+    
+
+    <!-- Main Page (Initially hidden) -->
+    <div class="container" id="mainPage" style="display: none;">
+      <div id="sketch-holder"></div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="p5.play.js"></script>
+    <script src="planck.min.js"></script>
+    <script src="app.js"></script>
+    <script src="sketch.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+      const nameInput = document.getElementById('name-input');
+      const msgInput = document.getElementById('msg-input');
+      const plantDropDown = document.getElementById('dropdownMenu');
+      const enterButton = document.getElementById('enterButton');
+      const visitorButton=document.getElementById('visitorButton');
+      // Check if all inputs are filled
+      function checkInputs() {
+        if (nameInput.value && msgInput.value && plantDropDown.value) {
+          enterButton.disabled = false; // Enable button if all fields are filled
+        } else {
+          enterButton.disabled = true; // Keep it disabled otherwise
+        }
+      }
+
+      // Listen for changes in the inputs
+      nameInput.addEventListener('input', checkInputs);
+      msgInput.addEventListe
