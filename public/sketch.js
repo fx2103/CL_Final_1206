@@ -37,20 +37,19 @@ function setup() {
   
   // 检查 socket 是否存在
   if (window.socket) {
-    console.log("initialize success");
+    
     socket = window.socket;
+    socketInitialized = true;
     socket.on('msg', (data) => {
       createNewFlower(data);    
             canPlant = true;
+      console.log("msg on");
     });
  
     socket.on('initialFlowers', (data) => {
-      
-      //flowers = data; // Load initial flowers from server
-      createNewFlower(data);  
-      
-      socketInitialized = true;
-
+    flowers = data; // Load initial flowers from server
+    //createNewFlower(data); 
+    console.log("initialflowers on");
     });
     
     
@@ -60,7 +59,10 @@ function setup() {
       // flowers.clear;
       // createNewFlower(data);  
     })
-  } else {
+    console.log("initialize success");
+  } 
+  else 
+  {
     console.error("Socket is not defined. Ensure app.js is loaded before sketch.js.");
   }
 
