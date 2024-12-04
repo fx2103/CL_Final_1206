@@ -1,4 +1,5 @@
 let flowers =[];
+let datas=[];
 let socket;
 let draggingFlower = null;
 let socketInitialized = false; // 标志，表示 socket 是否初始化完成
@@ -47,10 +48,10 @@ function setup() {
     });
  
     socket.on('initialFlowers', (data) => {
-      flowers = data; // Load initial flowers from server
-      flowers.forEach((flower) => {
-        createNewFlower(flower);
-        console.log("get the initialflowers");// 初始化花朵
+      datas = data; // Load initial flowers from server
+      datas.forEach((data) => {
+        createNewFlower(data);
+        //console.log("get the initialflowers");// 初始化花朵
         socketInitialized = true;
       });
     });
@@ -171,13 +172,9 @@ function createNewFlower(data) {
 //     ellipse(0, -25, 12, 12); // 增大花朵中心
 //     pop();
 // };
-  
-      if (typeof flower.draw !== 'function') {
-        console.error('Error: flower does not have a draw method:', flower);
-    }
-    console.log(flower);
+
   // if(flower.message!=undefined)
-  flowerss.add(flower);
+  flowers.push(flower);
   // console.log("花朵创建入栈成功");
   // console.log(flower);}
 }
@@ -188,10 +185,8 @@ if (socketInitialized) {
 
     // 绘制花朵
     //console.log(flowers);
-    for (let flower of flowerss) {
-       if (typeof flower.draw !== 'function') {
-        console.error('Error: flower does not have a draw method:', flower);
-    }
+    for (let flower of flowers) {
+
       if (flower.ifplanted == false) 
       {
         flower.x = mouseX;
