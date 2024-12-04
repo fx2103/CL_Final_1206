@@ -13,7 +13,7 @@ let currentFlower = null; // 当前正在放置的花朵
 let isFlowerPlanted = false; // 标记是否已经固定花朵
 let spanning = false;
 let canPlant = false;
-
+let lastBarrageTime=0;
 let opacity =255;
 let bee = {
   x: 0,
@@ -102,9 +102,8 @@ function createNewFlower(data) {
   flower.size = 1;
   flower.barrage = {
   text: `${flower.name}: ${flower.message}`,
-  x: data.x,
-  y: data.y,
-    
+  x: flower.x,
+  y: flower.y,
   };
   if(flower.ifplanted == true)
   {
@@ -227,7 +226,7 @@ if (socketInitialized) {
           flower.frequency +=0.0001;
           waterParticles.splice(i, 1); // 移除水滴
           let currentTime = millis();
-          let lastBarrageTime=0;
+
           const barrageCooldown = 500;
       if (currentTime - lastBarrageTime >= barrageCooldown) {
         // 发射弹幕
