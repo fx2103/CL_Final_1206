@@ -1,5 +1,5 @@
 let flowers =[];
-let flower;
+
 let socket;
 let draggingFlower = null;
 let socketInitialized = false; // 标志，表示 socket 是否初始化完成
@@ -41,7 +41,7 @@ function setup() {
     
   if (window.socket) {
     console.log("initialize success");
-    socketInitialized = true;
+    
     socket = window.socket;
     socket.on('msg', (data) => {
       createNewFlower(data);
@@ -52,6 +52,7 @@ function setup() {
       flowers.forEach((flower) => {
         createNewFlower(flower);
         console.log("get the initialflowers");// 初始化花朵
+        socketInitialized = true;
       });
     });
   } 
@@ -171,8 +172,10 @@ function createNewFlower(data) {
 // };
   flower.canDraw = true;
 
-  if(flower.message!=undefined)
-  {flowers.push(flower);}
+  // if(flower.message!=undefined)
+  // {flowers.push(flower);
+  // console.log("花朵创建入栈成功");
+  // console.log(flower);}
 }
 
 function draw() {
@@ -180,6 +183,7 @@ if (socketInitialized) {
     image(bgImage, 0, 0, width, height);
 
     // 绘制花朵
+    console.log(flowers);
     for (let flower of flowers) {
       if (flower.ifplanted == false) 
       {
