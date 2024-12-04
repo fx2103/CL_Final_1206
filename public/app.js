@@ -1,6 +1,6 @@
+
 window.addEventListener("load", function () {
   let socket;
-
   const welcomePage = document.getElementById('welcomePage');
   const mainPage = document.getElementById('mainPage');
   const enterButton = document.getElementById('enterButton');
