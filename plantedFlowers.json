@@ -145,5 +145,19 @@
     "x": 85,
     "y": 51,
     "ifplanted": true
+  },
+  {
+    "name": "cvb",
+    "message": "2345",
+    "x": 548,
+    "y": 443,
+    "ifplanted": true
+  },
+  {
+    "name": "jkl",
+    "message": "444",
+    "x": 707,
+    "y": 404,
+    "ifplanted": true
   }
 ]

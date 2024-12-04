@@ -74,6 +74,7 @@ function createNewFlower(data) {
   flower.y=data.y;
   flower.force=random(5,15);
   flower.frequency=random(0.5,0.8);
+  flower.canDraw = false;
   if(flower.ifplanted == true)
   {
     flower.position.x =data.x;
@@ -83,35 +84,35 @@ function createNewFlower(data) {
   
   
   // 将绘制逻辑直接添加到 flower 的 draw 方法中
-  flower.draw = function () {
-    // 计算摆动角度和控制偏移量
-    let sway = sin(frameCount *flower.frequency + this.position.x * 0.1) * flower.force; // Subtle sway angle (increase sway effect)
-    let controlOffset = sway * 1.5; // Adjust the curvature amount
-    let isFlowerPlanted = flower.ifplanted;
+//   flower.draw = function () {
+//     // 计算摆动角度和控制偏移量
+//     let sway = sin(frameCount *flower.frequency + this.position.x * 0.1) * flower.force; // Subtle sway angle (increase sway effect)
+//     let controlOffset = sway * 1.5; // Adjust the curvature amount
+//     let isFlowerPlanted = flower.ifplanted;
 
-    // 绘制花茎部分
-    stroke(34, 139, 34);
-    strokeWeight(6); // 增加花茎的粗细
-    noFill();
-    beginShape();
-    vertex(0, 0); // Bottom of the stem
-    quadraticVertex(controlOffset, -30, sway, -60); // Curve control and top point (increased length)
-    endShape();
+//     // 绘制花茎部分
+//     stroke(34, 139, 34);
+//     strokeWeight(6); // 增加花茎的粗细
+//     noFill();
+//     beginShape();
+//     vertex(0, 0); // Bottom of the stem
+//     quadraticVertex(controlOffset, -30, sway, -60); // Curve control and top point (increased length)
+//     endShape();
 
-    // 绘制花瓣部分
-    noStroke();
-    fill(255, 182, 193);
-    push();
-    translate(sway, -60); // 调整花瓣的高度
-    ellipse(-20, -20, 20, 20); // 增加花瓣的大小
-    ellipse(20, -20, 20, 20);
-    ellipse(0, -40, 25, 25); // 变大中心花瓣
-    ellipse(0, -10, 20, 20); // 变大底部花瓣
-    fill(255, 215, 0);
-    ellipse(0, -25, 12, 12); // 增大花朵中心
-    pop();
-};
-
+//     // 绘制花瓣部分
+//     noStroke();
+//     fill(255, 182, 193);
+//     push();
+//     translate(sway, -60); // 调整花瓣的高度
+//     ellipse(-20, -20, 20, 20); // 增加花瓣的大小
+//     ellipse(20, -20, 20, 20);
+//     ellipse(0, -40, 25, 25); // 变大中心花瓣
+//     ellipse(0, -10, 20, 20); // 变大底部花瓣
+//     fill(255, 215, 0);
+//     ellipse(0, -25, 12, 12); // 增大花朵中心
+//     pop();
+// };
+    flower.canDraw = true;
 
   if(flower.message!=undefined)
   {flowers.push(flower);}
@@ -131,13 +132,43 @@ function draw() {
         console.log("message is ",currentFlower.message);
       }
 
+      //
+      
+       flower.draw = function () {
+    // 计算摆动角度和控制偏移量
+    let sway = sin(frameCount *flower.frequency + flower.x * 0.1) * flower.force; // Subtle sway angle (increase sway effect)
+    let controlOffset = sway * 1.5; // Adjust the curvature amount
+    let isFlowerPlanted = flower.ifplanted;
+
+    // 绘制花茎部分
+    stroke(34, 139, 34);
+    strokeWeight(6); // 增加花茎的粗细
+    noFill();
+    beginShape();
+    vertex(0, 0); // Bottom of the stem
+    //quadraticVertex(controlOffset, -30, sway, -60); // Curve control and top point (increased length)
+    endShape();
+
+    // 绘制花瓣部分
+    noStroke();
+    fill(255, 182, 193);
+    push();
+    //translate(sway, -60); // 调整花瓣的高度
+    ellipse(-20, -20, 20, 20); // 增加花瓣的大小
+    ellipse(20, -20, 20, 20);
+    ellipse(0, -40, 25, 25); // 变大中心花瓣
+    ellipse(0, -10, 20, 20); // 变大底部花瓣
+    fill(255, 215, 0);
+    ellipse(0, -25, 12, 12); // 增大花朵中心
+    pop();
+};
       flower.draw(); // 调用 flower 的 draw 方法绘制花朵
 
       // 显示花朵的名称和消息
-      if (dist(mouseX, mouseY, flower.position.x, flower.position.y) < 25) {
+      if (dist(mouseX, mouseY, flower.x, flower.y) < 25) {
         fill(255);
         noStroke();
-        text(`${flower.name}: ${flower.message}`, flower.position.x, flower.position.y - 10);
+        text(`${flower.name}: ${flower.message}`, flower.x, flower.y - 10);
       }
     }
   } else {
