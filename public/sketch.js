@@ -70,15 +70,15 @@ function createNewFlower(data) {
   console.log("the message is ",flower.message);
   flower.type = data.plant;
   flower.ifplanted = data.ifplanted;
-  flower.x=data.x;
-  flower.y=data.y;
+  //flower.x=data.x;
+  //flower.y=data.y;
   flower.force=random(5,15);
   flower.frequency=random(0.5,0.8);
   flower.canDraw = false;
   if(flower.ifplanted == true)
   {
-    flower.position.x =data.x;
-    flower.position.y =data.y;
+    flower.x =data.x;
+    flower.y =data.y;
   }
   else{currentFlower=flower;}
   
@@ -126,8 +126,8 @@ function draw() {
     console.log("flowers num"+flowers.length);
     for (let flower of flowers) {
       if (!flower.ifplanted) {
-        flower.position.x = mouseX;
-        flower.position.y = mouseY;
+        flower.x = mouseX;
+        flower.y = mouseY;
         currentFlower = flower;
         console.log("message is ",currentFlower.message);
       }
@@ -146,14 +146,14 @@ function draw() {
     noFill();
     beginShape();
     vertex(0, 0); // Bottom of the stem
-    //quadraticVertex(controlOffset, -30, sway, -60); // Curve control and top point (increased length)
+    quadraticVertex(controlOffset, -30, sway, -60); // Curve control and top point (increased length)
     endShape();
 
     // 绘制花瓣部分
     noStroke();
     fill(255, 182, 193);
     push();
-    //translate(sway, -60); // 调整花瓣的高度
+    translate(sway, -60); // 调整花瓣的高度
     ellipse(-20, -20, 20, 20); // 增加花瓣的大小
     ellipse(20, -20, 20, 20);
     ellipse(0, -40, 25, 25); // 变大中心花瓣
