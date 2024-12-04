@@ -15,7 +15,7 @@ let canPlant = false;
 let bee = {
   x: 0,
   y: 200,
-  size: 20,
+  size: 25,
   speed: 2,
   wingAngle: 0,
   wingFlapSpeed: 0.2,
@@ -228,6 +228,7 @@ function draw() {
   }
   drawSprites(); // 通过 p5.play 的 drawSprites 来绘制所有精
   
+  //bee
   if(bee.visible){
       drawBee(bee.x, bee.y, bee.size, bee.wingAngle);
       updateBee();
