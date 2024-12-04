@@ -70,6 +70,7 @@ function setup() {
 function createNewFlower(data) {
   //console.log("get in the create correctly");
   let flower = createSprite(random(50, 350), random(200, 350), 20, 40); // 使用 p5.play 的 createSprite 创建花朵
+  flower.id = data.id;
   flower.name = data.name;
   flower.message = data.message;
   //console.log("the message is ",flower.message);
@@ -130,7 +131,8 @@ function draw() {
     // 绘制花朵
     for (let flower of flowers) {
       if (!flower.ifplanted) {
-        if(flower.name == ){
+        console.log(flower.id + " + " + socket.id);
+        if(flower.id == socket.id){
                   flower.x = mouseX;
         flower.y = mouseY;
         currentFlower = flower;

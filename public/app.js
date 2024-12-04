@@ -67,7 +67,7 @@ window.addEventListener("load", function () {
       const plant = plantDropDown.value;
       const ifplanted = false;
       // 将花朵数据发送到服务器
-      const flowerData = { name, message: message, flowertype:plant, x: 210, y: 100 ,ifplanted};
+      const flowerData = { id:socket.id, name, message: message, flowertype:plant, x: 210, y: 100 ,ifplanted};
       window.socket=socket;
       socket.emit("msg", flowerData);  // 发送花朵数据到服务器
       console.log("Sending flower data:", flowerData);
