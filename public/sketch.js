@@ -47,8 +47,9 @@ function setup() {
     });
  
     socket.on('initialFlowers', (data) => {
-     flowers = data; // Load initial flowers from server
-    //createNewFlower(data); 
+      flowers = data; // Load initial flowers from server
+      flowers.forEach((flower) => {
+      createNewFlower(flower);
       console.log("initialflowers on");
       console.log(flowers);
     });
@@ -119,7 +120,35 @@ function createNewFlower(data) {
   y: flower.y - 30,
   opacity: 255
   };
- 
+  flower.draw = function () 
+  {
+    // 计算摆动角度和控制偏移量
+    let sway = sin(frameCount *flower.frequency + flower.x * 0.1) * flower.force; // Subtle sway angle (increase sway effect)
+    let controlOffset = sway * 1.5; // Adjust the curvature amount
+    //let isFlowerPlanted = flower.ifplanted;
+         //console.log(flower.frequency);
+    // 绘制花茎部分
+    stroke(34, 139, 34);
+    strokeWeight(6); // 增加花茎的粗细
+    noFill();
+    beginShape();
+    vertex(0, 0); // Bottom of the stem
+    quadraticVertex(controlOffset, -30, sway, -60); // Curve control and top point (increased length)
+    endShape();
+
+    // 绘制花瓣部分
+    noStroke();
+    fill(255, 182, 193);
+    push();
+    translate(sway, -30*flower.size); // 调整花瓣的高度
+    ellipse(-10*flower.size, -10*flower.size, 10*flower.size, 10*flower.size); // 增加花瓣的大小
+    ellipse(10*flower.size, -10*flower.size, 10*flower.size, 10*flower.size);
+    ellipse(0, -20*flower.size, 12.5*flower.size, 12.5*flower.size); // 变大中心花瓣
+    ellipse(0, -5*flower.size, 10*flower.size, 10*flower.size); // 变大底部花瓣
+    fill(255, 215, 0);
+    ellipse(0, -12.5*flower.size, 6*flower.size, 6*flower.size); // 增大花朵中心
+    pop();
+};
   
   
   // 将绘制逻辑直接添加到 flower 的 draw 方法中
@@ -165,46 +194,12 @@ function draw() {
     for (let flower of flowers) {
       if (flower.ifplanted == false) 
       {
-        if(flower.id == socket.id)
-        {
         flower.x = mouseX;
         flower.y = mouseY;
         currentFlower = flower;
-        }
-      }}
-  }
-  else {
-    console.log("Waiting for socket to initialize...");
-  }
-    flower.draw = function () {
-    // 计算摆动角度和控制偏移量
-    let sway = sin(frameCount *flower.frequency + flower.x * 0.1) * flower.force; // Subtle sway angle (increase sway effect)
-    let controlOffset = sway * 1.5; // Adjust the curvature amount
-    //let isFlowerPlanted = flower.ifplanted;
-         //console.log(flower.frequency);
-    // 绘制花茎部分
-    stroke(34, 139, 34);
-    strokeWeight(6); // 增加花茎的粗细
-    noFill();
-    beginShape();
-    vertex(0, 0); // Bottom of the stem
-    quadraticVertex(controlOffset, -30, sway, -60); // Curve control and top point (increased length)
-    endShape();
-
-    // 绘制花瓣部分
-    noStroke();
-    fill(255, 182, 193);
-    push();
-    translate(sway, -30*flower.size); // 调整花瓣的高度
-    ellipse(-10*flower.size, -10*flower.size, 10*flower.size, 10*flower.size); // 增加花瓣的大小
-    ellipse(10*flower.size, -10*flower.size, 10*flower.size, 10*flower.size);
-    ellipse(0, -20*flower.size, 12.5*flower.size, 12.5*flower.size); // 变大中心花瓣
-    ellipse(0, -5*flower.size, 10*flower.size, 10*flower.size); // 变大底部花瓣
-    fill(255, 215, 0);
-    ellipse(0, -12.5*flower.size, 6*flower.size, 6*flower.size); // 增大花朵中心
-    pop();
-};
-    flower.draw(); // 调用 flower 的 draw 方法绘制花朵
+      }
+      }
+      flower.draw();
 
       // 显示花朵的名称和消息
   if (dist(mouseX, mouseY, flower.x, flower.y) < 25) {
