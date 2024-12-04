@@ -114,7 +114,7 @@ function createNewFlower(data) {
   text: `${flower.name}: ${flower.message}`,
   x: flower.x,
   y: flower.y - 30,
-  opacity: 255,
+  opacity: 255
   };
  
   
@@ -238,21 +238,21 @@ function draw() {
           flower.size = min(flower.size, 2); // 限制最大大小为2倍
           flower.frequency +=0.0001;
           waterParticles.splice(i, 1); // 移除水滴
-          if (flower.size ==2){
-            fill(255, 255, 255, flower.barrage.opacity);
-            noStroke();
-            textAlign(CENTER);
-            text(flower.barrage.text, flower.barrage.x, flower.barrage.y);
+//           if (flower.size ==2){
+//             fill(255, 255, 255, flower.barrage.opacity);
+//             noStroke();
+//             textAlign(CENTER);
+//             text(flower.barrage.text, flower.barrage.x, flower.barrage.y);
 
-            // 弹幕逐渐上移并淡出
-            flower.barrage.y -= 1;
-            flower.barrage.opacity -= 2;
+//             // 弹幕逐渐上移并淡出
+//             flower.barrage.y -= 1;
+//             flower.barrage.opacity -= 2;
 
-            // 移除淡出完成的弹幕
-            if (flower.barrage.opacity <= 0) {
-            flower.barrage = null;
-            }
-         }
+//             // 移除淡出完成的弹幕
+//             if (flower.barrage.opacity <= 0) {
+//             flower.barrage = null;
+//             }
+//         }
           flower.draw();
           break;
         }
@@ -267,7 +267,7 @@ function draw() {
     noStroke();
     text(`${flower.name}: ${flower.message}`, flower.x, flower.y - 10);
   }
-}
+
   if(spanning){
     span.x=mouseX;
     span.y=mouseY;
