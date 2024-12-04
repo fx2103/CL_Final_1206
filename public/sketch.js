@@ -32,8 +32,9 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight).parent('sketch-holder');
+  //world.gravity.y = 9.8;
   image(bgImage, 0, 0, width, height);
-
+  
   // 检查 socket 是否存在
   if (window.socket) {
     console.log("initialize success");
@@ -102,6 +103,7 @@ function createNewFlower(data) {
   flower.force=random(5,15);
   flower.frequency=random(0.5,0.8);
   flower.canDraw = false;
+  flower.size = 1;
   if(flower.ifplanted == true)
   {
     flower.x =data.x;
@@ -184,13 +186,13 @@ function draw() {
     noStroke();
     fill(255, 182, 193);
     push();
-    translate(sway, -60); // 调整花瓣的高度
-    ellipse(-20, -20, 20, 20); // 增加花瓣的大小
-    ellipse(20, -20, 20, 20);
-    ellipse(0, -40, 25, 25); // 变大中心花瓣
-    ellipse(0, -10, 20, 20); // 变大底部花瓣
+    translate(sway, -30*flower.size); // 调整花瓣的高度
+    ellipse(-10*flower.size, -210*flower.size, 10*flower.size, 10*flower.size); // 增加花瓣的大小
+    ellipse(10*flower.size, -10*flower.size, 10*flower.size, 10*flower.size);
+    ellipse(0, -20*flower.size, 12.5*flower.size, 12.5*flower.size); // 变大中心花瓣
+    ellipse(0, -5*flower.size, 10*flower.size, 10*flower.size); // 变大底部花瓣
     fill(255, 215, 0);
-    ellipse(0, -25, 12, 12); // 增大花朵中心
+    ellipse(0, -12.5*flower.size, 6*flower.size, 6*flower.size); // 增大花朵中心
     pop();
 };
       flower.draw(); // 调用 flower 的 draw 方法绘制花朵
@@ -220,6 +222,19 @@ function draw() {
     createWaterParticles();
     updateWaterParticles();
     drawWaterParticles();
+    for (let i = waterParticles.length - 1; i >= 0; i--) {
+      let particle = waterParticles[i];
+      for (let flower of flowers) {
+        if (dist(particle.x, particle.y, flower.x, flower.y) < 30) {
+          // 让花朵生长
+          flower.size = (flower.size || 1) + 0.1; // 增长花朵的大小
+          flower.size = min(flower.size, 2); // 限制最大大小为2倍
+          waterParticles.splice(i, 1); // 移除水滴
+          flower.draw();
+          break;
+        }
+      }
+    }
   }
   if(spanning){
     span.x=mouseX;
