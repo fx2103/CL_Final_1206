@@ -23,14 +23,15 @@ function setup() {
   // 检查 socket 是否存在
   if (window.socket) {
     console.log("initialize success");
-    socketInitialized = true;
     socket = window.socket;
     socket.on('msg', (data) => {
-      createNewFlower(data);
+      createNewFlower(data);    
+      
     });
  
     socket.on('initialFlowers', (data) => {
       flowers = data; // Load initial flowers from server
+      socketInitialized = true;
     });
   } else {
     console.error("Socket is not defined. Ensure app.js is loaded before sketch.js.");
@@ -79,6 +80,8 @@ function createNewFlower(data) {
     flower.position.y =data.y;
   }
   else{currentFlower=flower;}
+  
+  
   // 将绘制逻辑直接添加到 flower 的 draw 方法中
   flower.draw = function () {
     // 计算摆动角度和控制偏移量
