@@ -140,6 +140,7 @@ function draw() {
     let controlOffset = sway * 1.5; // Adjust the curvature amount
     let isFlowerPlanted = flower.ifplanted;
 
+         console.log(flower.frequency);
     // 绘制花茎部分
     stroke(34, 139, 34);
     strokeWeight(6); // 增加花茎的粗细
