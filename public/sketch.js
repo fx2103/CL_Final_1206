@@ -110,6 +110,13 @@ function createNewFlower(data) {
     flower.y =data.y;
   }
   else{currentFlower=flower;}
+  flower.barrage = {
+  text: `${flower.name}: ${flower.message}`,
+  x: flower.x,
+  y: flower.y - 30,
+  opacity: 255,
+  };
+ 
   
   
   // 将绘制逻辑直接添加到 flower 的 draw 方法中
@@ -231,12 +238,36 @@ function draw() {
           flower.size = min(flower.size, 2); // 限制最大大小为2倍
           flower.frequency +=0.0001;
           waterParticles.splice(i, 1); // 移除水滴
+          if (flower.size ==2){
+            fill(255, 255, 255, flower.barrage.opacity);
+            noStroke();
+            textAlign(CENTER);
+            text(flower.barrage.text, flower.barrage.x, flower.barrage.y);
+
+            // 弹幕逐渐上移并淡出
+            flower.barrage.y -= 1;
+            flower.barrage.opacity -= 2;
+
+            // 移除淡出完成的弹幕
+            if (flower.barrage.opacity <= 0) {
+            flower.barrage = null;
+            }
+         }
           flower.draw();
           break;
         }
       }
     }
   }
+   
+
+  // 显示花朵信息
+  if (dist(mouseX, mouseY, flower.x, flower.y) < 25) {
+    fill(255);
+    noStroke();
+    text(`${flower.name}: ${flower.message}`, flower.x, flower.y - 10);
+  }
+}
   if(spanning){
     span.x=mouseX;
     span.y=mouseY;
