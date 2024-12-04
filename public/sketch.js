@@ -35,40 +35,22 @@ function setup() {
   //world.gravity.y = 9.8;
   image(bgImage, 0, 0, width, height);
   
-  // 检查 socket 是否存在
-  if (window.socket) {
     
-    socket = window.socket;
+  if (window.socket) {
+    console.log("initialize success");
     socketInitialized = true;
+    socket = window.socket;
     socket.on('msg', (data) => {
-      createNewFlower(data);    
-            canPlant = true;
-      console.log("msg on");
+      createNewFlower(data);
     });
  
     socket.on('initialFlowers', (data) => {
       flowers = data; // Load initial flowers from server
-      flowers.forEach((flower) => {
-      createNewFlower(flower);
-      console.log("initialflowers on");
-      console.log(flowers);
     });
-    
-    
-    socket.on('update', (data)=>{
-      console.log("newFlower" );
-      flowers.push(data);
-      // flowers.clear;
-      // createNewFlower(data);  
-    })
-    console.log("initialize success");
   } 
-  else 
-  {
+  else {
     console.error("Socket is not defined. Ensure app.js is loaded before sketch.js.");
   }
-
-  // 创建一个按钮并设置点击事件
   let button = createButton('Watering');
   button.position(10, 10);
   button.mousePressed(() => {
@@ -187,7 +169,7 @@ function createNewFlower(data) {
 }
 
 function draw() {
-  if (socketInitialized) {
+if (socketInitialized) {
     image(bgImage, 0, 0, width, height);
 
     // 绘制花朵
@@ -199,7 +181,7 @@ function draw() {
         currentFlower = flower;
       }
       }
-      flower.draw();
+  flower.draw();
 
       // 显示花朵的名称和消息
   if (dist(mouseX, mouseY, flower.x, flower.y) < 25) {
