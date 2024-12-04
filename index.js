@@ -18,7 +18,7 @@ const dataFile = 'plantedFlowers.json'; // 存储花朵数据的 JSON 文件
 function loadFlowers() {
     try {
         const data = fs.readFileSync(dataFile, 'utf8');
-        console.log("success get the flower data");
+        console.log("load successful");
         return JSON.parse(data);
     } catch (err) {
         console.error('Error reading the file:', err);
@@ -38,28 +38,29 @@ function saveFlowers(flowers) {
 
 // Initialize plantedFlowers with data from the JSON file
 let plantedFlowers = loadFlowers();
-
+console.log("already get load");
+console.log(plantedFlowers);
 // Send the existing flowers to new clients when they connect
 io.sockets.on('connection', function (socket) {
     console.log("We have a new client: " + socket.id);
 
     // Send existing flowers to the new client
     socket.emit('initialFlowers', plantedFlowers);
-
+    console.log("send initialFlowers");
     // Listen for a message named 'msg' from this client
     socket.on('update', function (data) {
         console.log("Received a 'update' event");
         console.log(data); // Log the complete data object
 
         const newFlower = {
-            id:data.id,
+
             name: data.name,
             message: data.message,                 // message should be 'msg'
             flowertype: data.flowerType,  // flowerType should be 'plant'
  
             x: data.x,
             y: data.y,
-            ifplanted: data.ifplanted || false// 只有当 ifplanted 为 true 时才保存
+            ifplanted: data.ifplanted || false // 只有当 ifplanted 为 true 时才保存
         };
 
         // 只有当 ifplanted 为 true 时才保存花朵
@@ -76,7 +77,7 @@ io.sockets.on('connection', function (socket) {
         console.log(data); // Log the complete data object
 
         const newFlower = {
-            id:data.id,
+
             name: data.name,
             message: data.message,                 // message should be 'msg'
             flowertype: data.flowerType,  // flowerType should be 'plant'
@@ -90,7 +91,6 @@ io.sockets.on('connection', function (socket) {
        
 
         io.sockets.emit('msg', newFlower);  // 广播新的花朵给所有客户端
-        console.log("index.js msg on");
         
     });
     // Listen for this client to disconnect

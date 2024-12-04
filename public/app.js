@@ -26,7 +26,8 @@ window.addEventListener("load", function () {
 
     socket.on("initialFlowers", function (flowers) {
       flowers.forEach((flower) => {
-        createNewFlower(flower);  // 初始化花朵
+        createNewFlower(flower);
+        console.log("get the initialflowers");// 初始化花朵
       });
     });
 
