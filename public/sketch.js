@@ -1,4 +1,5 @@
 let flowers =[];
+let flower;
 let socket;
 let draggingFlower = null;
 let socketInitialized = false; // 标志，表示 socket 是否初始化完成
@@ -32,6 +33,8 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight).parent('sketch-holder');
+  let sprite = createSprite(400, 300, 50, 50);
+  sprite.shapeColor = color(255, 0, 0);
   //world.gravity.y = 9.8;
   image(bgImage, 0, 0, width, height);
   
@@ -46,6 +49,10 @@ function setup() {
  
     socket.on('initialFlowers', (data) => {
       flowers = data; // Load initial flowers from server
+      flowers.forEach((flower) => {
+        createNewFlower(flower);
+        console.log("get the initialflowers");// 初始化花朵
+      });
     });
   } 
   else {
@@ -88,7 +95,7 @@ function createNewFlower(data) {
   //flower.y=data.y;
   flower.force=random(5,15);
   flower.frequency=random(0.5,0.8);
-  flower.canDraw = false;
+  flower.canDraw = true;
   flower.size = 1;
   if(flower.ifplanted == true)
   {
@@ -258,7 +265,7 @@ if (socketInitialized) {
   }
 }
 
-
+}
 
 
 
