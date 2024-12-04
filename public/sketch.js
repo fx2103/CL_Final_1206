@@ -1,5 +1,4 @@
 let flowers =[];
-let flowerss = new Group();
 let socket;
 let draggingFlower = null;
 let socketInitialized = false; // 标志，表示 socket 是否初始化完成
@@ -104,12 +103,12 @@ function createNewFlower(data) {
     flower.y =data.y;
   }
   else{currentFlower=flower;}
-  flower.barrage = {
-  text: `${flower.name}: ${flower.message}`,
-  x: flower.x,
-  y: flower.y - 30,
-  opacity: 255
-  };
+  // flower.barrage = {
+  // text: `${flower.name}: ${flower.message}`,
+  // x: flower.x,
+  // y: flower.y - 30,
+  // opacity: 255,
+  // };
   flower.canDraw = true;
   flower.draw = function () 
   {
