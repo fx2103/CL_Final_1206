@@ -493,6 +493,7 @@ function updateBee() {
   //Oscillate
   oscillationAngle += bee.oscillationSpeed;
   bee.y = 200 + sin(oscillationAngle) * bee.oscillationHeight;
+  console.log(oscillationAngle + "+" + oscillationHeight)
   
   // Reset position if it goes off-screen
   if (bee.x - bee.size / 2 > width) {
