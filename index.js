@@ -45,6 +45,9 @@ io.sockets.on('connection', function (socket) {
     console.log("We have a new client: " + socket.id);
 
     // Send existing flowers to the new client
+    setTimeout(function() {
+    console.log("This will be logged after 2 seconds.");
+    }, 2000);
     socket.emit('initialFlowers', plantedFlowers);
     console.log("send initialFlowers");
     // Listen for a message named 'msg' from this client

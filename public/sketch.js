@@ -47,9 +47,10 @@ function setup() {
     });
  
     socket.on('initialFlowers', (data) => {
-    flowers = data; // Load initial flowers from server
+     flowers = data; // Load initial flowers from server
     //createNewFlower(data); 
-    console.log("initialflowers on");
+      console.log("initialflowers on");
+      console.log(flowers);
     });
     
     
