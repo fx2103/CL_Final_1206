@@ -190,9 +190,11 @@ if (socketInitialized) {
         flower.x = mouseX;
         flower.y = mouseY;
         currentFlower = flower;
+        flower.draw();
       }
-      }
-  flower.draw();
+      flower.draw();
+      
+  
 
       // 显示花朵的名称和消息
   if (dist(mouseX, mouseY, flower.x, flower.y) < 25) {
@@ -247,13 +249,7 @@ if (socketInitialized) {
     }
   }
    
-
-  // 显示花朵信息
-  if (dist(mouseX, mouseY, flower.x, flower.y) < 25) {
-    fill(255);
-    noStroke();
-    text(`${flower.name}: ${flower.message}`, flower.x, flower.y - 10);
-  }
+  
 
   if(spanning){
     span.x=mouseX;
@@ -268,7 +264,7 @@ if (socketInitialized) {
       updateBee();
   }
 }
-
+}
 }
 
 
