@@ -328,8 +328,10 @@ function mousePressed() {
     currentFlower.ifplanted=true;
 
     isFlowerPlanted = true; // Mark the flower as planted
+    canPlant = false;
     console.log("update the flower");
     socket.emit('update', {name:currentFlower.name,message:currentFlower.message,flowertype:currentFlower.type,x: currentFlower.x, y: currentFlower.y,ifplanted:isFlowerPlanted}); // Send new flower position to server
+  }
   }
   if (watering && !pouring) {
     // 点击后，开始浇水
@@ -356,7 +358,6 @@ function mousePressed() {
   //   currentFlower.position.x = mouseX;
   //   currentFlower.position.y = mouseY;
   // }
-  }
  
 }
 
