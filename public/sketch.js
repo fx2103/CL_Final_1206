@@ -23,6 +23,8 @@ let bee = {
   oscillationHeight:20,
   oscillationSpeed: 0.05,
 };
+let oscillationAngle = 0;
+let wingAnimationTime = 0;
 
 function preload() {
   bgImage = loadImage('https://cdn.glitch.global/8c93b6c9-9dc6-4089-8240-b26b2c58c581/pots_v05.png?v=1730724313078');
@@ -168,7 +170,6 @@ function draw() {
     let sway = sin(frameCount *flower.frequency + flower.x * 0.1) * flower.force; // Subtle sway angle (increase sway effect)
     let controlOffset = sway * 1.5; // Adjust the curvature amount
     //let isFlowerPlanted = flower.ifplanted;
-
          //console.log(flower.frequency);
     // 绘制花茎部分
     stroke(34, 139, 34);
@@ -483,10 +484,14 @@ function drawBee(x, y, size, wingAngle) {
 function updateBee() {
   // Move the bee across the canvas
   bee.x += bee.speed;
-  bee.wingAngle = sin(frameCount * bee.wingFlapSpeed) * QUARTER_PI; // Flap wings
+  
+  //Flap wings
+  wingAnimationTime += bee.wingFlapSpeed;
+  bee.wingAngle = sin(wingAnimationTime) * QUARTER_PI;
   
   //Oscillate
-  bee.y = 200 + sin(frameCount * bee.oscillationSpeed) * bee.oscillationHeight;
+  oscillationAngle += bee.oscillationSpeed;
+  bee.y = 200 + sin(oscillationAngle) * bee.oscillationHeight;
   
   // Reset position if it goes off-screen
   if (bee.x - bee.size / 2 > width) {
@@ -495,7 +500,7 @@ function updateBee() {
   }
 }
 
-//console.log(frameCount);
+
 
 function windowResized() {
   // 确保窗口尺寸变化时画布能适配
