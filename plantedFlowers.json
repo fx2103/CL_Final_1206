@@ -96,5 +96,12 @@
     "x": 213,
     "y": 257,
     "ifplanted": true
+  },
+  {
+    "name": "rrr",
+    "message": "111",
+    "x": 547,
+    "y": 570,
+    "ifplanted": true
   }
 ]
