@@ -104,12 +104,12 @@ function createNewFlower(data) {
     flower.y =data.y;
   }
   else{currentFlower=flower;}
-  // flower.barrage = {
-  // text: `${flower.name}: ${flower.message}`,
-  // x: flower.x,
-  // y: flower.y - 30,
-  // opacity: 255,
-  // };
+  flower.barrage = {
+  text: `${flower.name}: ${flower.message}`,
+  x: flower.x,
+  y: flower.y - 30,
+  opacity: 255,
+  };
   flower.canDraw = true;
   flower.draw = function () 
   {
@@ -200,7 +200,7 @@ if (socketInitialized) {
         fill(255);
         noStroke();
         text(`${flower.name}: ${flower.message}`, flower.x, flower.y - 10);
-      }
+      }}
 
       if (watering) {
     wateringCan.x = mouseX;
@@ -223,21 +223,30 @@ if (socketInitialized) {
           flower.size = min(flower.size, 2); // 限制最大大小为2倍
           flower.frequency +=0.0001;
           waterParticles.splice(i, 1); // 移除水滴
-//           if (flower.size ==2){
-//             fill(255, 255, 255, flower.barrage.opacity);
-//             noStroke();
-//             textAlign(CENTER);
-//             text(flower.barrage.text, flower.barrage.x, flower.barrage.y);
+          let currentTime = millis();
+          let lastBarrageTime=0;
+          const barrageCooldown = 500;
+      if (currentTime - lastBarrageTime >= barrageCooldown) {
+        // 发射弹幕
+        if (flower.size == 2) {
+          fill(255, 255, 255, flower.barrage.opacity);
+          noStroke();
+          textAlign(CENTER);
+          text(flower.barrage.text, flower.barrage.x, flower.barrage.y);
 
-//             // 弹幕逐渐上移并淡出
-//             flower.barrage.y -= 1;
-//             flower.barrage.opacity -= 2;
+          // 弹幕逐渐上升并淡出
+          flower.barrage.y -= 1;
+          flower.barrage.opacity -= 2;
 
-//             // 移除淡出完成的弹幕
-//             if (flower.barrage.opacity <= 0) {
-//             flower.barrage = null;
-//             }
-//         }
+          // 移除淡出完成的弹幕
+          if (flower.barrage.opacity <= 0) {
+            flower.barrage = null;
+          }
+        }
+
+        // 更新最后一次发射弹幕的时间
+        lastBarrageTime = currentTime;
+      }
           flower.draw();
           break;
         }
@@ -250,7 +259,7 @@ if (socketInitialized) {
     span.y=mouseY;
     drawShovel(span.x,span.y);
   }
-    }
+    
   drawSprites(); // 通过 p5.play 的 drawSprites 来绘制所有精
   
   //bee
