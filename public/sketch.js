@@ -187,7 +187,7 @@ function draw() {
     fill(255, 182, 193);
     push();
     translate(sway, -30*flower.size); // 调整花瓣的高度
-    ellipse(-10*flower.size, -210*flower.size, 10*flower.size, 10*flower.size); // 增加花瓣的大小
+    ellipse(-10*flower.size, -10*flower.size, 10*flower.size, 10*flower.size); // 增加花瓣的大小
     ellipse(10*flower.size, -10*flower.size, 10*flower.size, 10*flower.size);
     ellipse(0, -20*flower.size, 12.5*flower.size, 12.5*flower.size); // 变大中心花瓣
     ellipse(0, -5*flower.size, 10*flower.size, 10*flower.size); // 变大底部花瓣
@@ -227,8 +227,9 @@ function draw() {
       for (let flower of flowers) {
         if (dist(particle.x, particle.y, flower.x, flower.y) < 30) {
           // 让花朵生长
-          flower.size = (flower.size || 1) + 0.1; // 增长花朵的大小
+          flower.size = (flower.size || 1) + 0.001; // 增长花朵的大小
           flower.size = min(flower.size, 2); // 限制最大大小为2倍
+          flower.frequency +=0.0001;
           waterParticles.splice(i, 1); // 移除水滴
           flower.draw();
           break;
