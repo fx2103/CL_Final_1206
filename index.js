@@ -18,6 +18,7 @@ const dataFile = 'plantedFlowers.json'; // 存储花朵数据的 JSON 文件
 function loadFlowers() {
     try {
         const data = fs.readFileSync(dataFile, 'utf8');
+        console.log("success get the flower data");
         return JSON.parse(data);
     } catch (err) {
         console.error('Error reading the file:', err);

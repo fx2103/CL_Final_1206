@@ -24,7 +24,7 @@ window.addEventListener("load", function () {
     //   createNewFlower(data);  // 创建花朵
     // });
 
-    socket.once("initialFlowers", function (flowers) {
+    socket.on("initialFlowers", function (flowers) {
       flowers.forEach((flower) => {
         createNewFlower(flower);  // 初始化花朵
       });
