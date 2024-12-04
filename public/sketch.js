@@ -126,7 +126,6 @@ function draw() {
     image(bgImage, 0, 0, width, height);
 
     // 绘制花朵
-    console.log("flowers num"+flowers.length);
     for (let flower of flowers) {
       if (!flower.ifplanted) {
         flower.x = mouseX;
@@ -134,6 +133,7 @@ function draw() {
         currentFlower = flower;
         console.log("message is ",currentFlower.message);
       }
+    console.log(flower.ifplanted);
 
       //
       

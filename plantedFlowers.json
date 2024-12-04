@@ -45,5 +45,15 @@
     "x": 304,
     "y": 301,
     "ifplanted": true
+  },
+  {
+    "x": 540,
+    "y": 380,
+    "ifplanted": true
+  },
+  {
+    "x": 617,
+    "y": 383,
+    "ifplanted": true
   }
 ]
