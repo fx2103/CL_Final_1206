@@ -102,8 +102,9 @@ function createNewFlower(data) {
   flower.size = 1;
   flower.barrage = {
   text: `${flower.name}: ${flower.message}`,
-  x: flower.x,
-  y: flower.y,
+  x: data.x,
+  y: data.y,
+    
   };
   if(flower.ifplanted == true)
   {
