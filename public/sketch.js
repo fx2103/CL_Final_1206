@@ -1,5 +1,5 @@
 let flowers =[];
-
+let flowerss = new Group();
 let socket;
 let draggingFlower = null;
 let socketInitialized = false; // 标志，表示 socket 是否初始化完成
@@ -138,9 +138,7 @@ function createNewFlower(data) {
     ellipse(0, -5*flower.size, 10*flower.size, 10*flower.size); // 变大底部花瓣
     fill(255, 215, 0);
     ellipse(0, -12.5*flower.size, 6*flower.size, 6*flower.size); // 增大花朵中心
-    if (typeof flower.draw !== 'function') {
-        console.error('Error: flower does not have a draw method:', flower);
-    }
+
     pop();
 };
   
@@ -175,9 +173,12 @@ function createNewFlower(data) {
 //     pop();
 // };
   
-
+      if (typeof flower.draw !== 'function') {
+        console.error('Error: flower does not have a draw method:', flower);
+    }
+    console.log(flower);
   // if(flower.message!=undefined)
-  flowers.push(flower);
+  flowerss.add(flower);
   // console.log("花朵创建入栈成功");
   // console.log(flower);}
 }
@@ -187,8 +188,11 @@ if (socketInitialized) {
     image(bgImage, 0, 0, width, height);
 
     // 绘制花朵
-    console.log(flowers);
-    for (let flower of flowers) {
+    //console.log(flowers);
+    for (let flower of flowerss) {
+       if (typeof flower.draw !== 'function') {
+        console.error('Error: flower does not have a draw method:', flower);
+    }
       if (flower.ifplanted == false) 
       {
         flower.x = mouseX;
