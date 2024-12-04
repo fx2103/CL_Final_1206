@@ -43,6 +43,8 @@ function setup() {
     socket.on('update', (data)=>{
       console.log("newFlower" );
       flowers.push(data);
+      // flowers.clear;
+      // createNewFlower(data);  
     })
   } else {
     console.error("Socket is not defined. Ensure app.js is loaded before sketch.js.");
