@@ -148,7 +148,7 @@ function createNewFlower(data) {
 //     ellipse(0, -25, 12, 12); // 增大花朵中心
 //     pop();
 // };
-    flower.canDraw = true;
+  flower.canDraw = true;
 
   if(flower.message!=undefined)
   {flowers.push(flower);}
@@ -160,21 +160,20 @@ function draw() {
 
     // 绘制花朵
     for (let flower of flowers) {
-      if (flower.ifplanted == false) {
-        console.log(flower.id + " + " + socket.id);
-        if(flower.id == socket.id){
-                  flower.x = mouseX;
+      if (flower.ifplanted == false) 
+      {
+        if(flower.id == socket.id)
+        {
+        flower.x = mouseX;
         flower.y = mouseY;
         currentFlower = flower;
-        //console.log("message is ",currentFlower.message);
         }
-
-      }
-    //console.log(flower.ifplanted);
-
-      //
-      
-       flower.draw = function () {
+      }}
+  }
+  else {
+    console.log("Waiting for socket to initialize...");
+  }
+    flower.draw = function () {
     // 计算摆动角度和控制偏移量
     let sway = sin(frameCount *flower.frequency + flower.x * 0.1) * flower.force; // Subtle sway angle (increase sway effect)
     let controlOffset = sway * 1.5; // Adjust the curvature amount
@@ -202,18 +201,15 @@ function draw() {
     ellipse(0, -12.5*flower.size, 6*flower.size, 6*flower.size); // 增大花朵中心
     pop();
 };
-      flower.draw(); // 调用 flower 的 draw 方法绘制花朵
+    flower.draw(); // 调用 flower 的 draw 方法绘制花朵
 
       // 显示花朵的名称和消息
-      if (dist(mouseX, mouseY, flower.x, flower.y) < 25) {
+  if (dist(mouseX, mouseY, flower.x, flower.y) < 25) {
         fill(255);
         noStroke();
         text(`${flower.name}: ${flower.message}`, flower.x, flower.y - 10);
       }
-    }
-  } else {
-    console.log("Waiting for socket to initialize...");
-  }
+
 
   // 如果正在浇水，水壶会显示
   if (watering) {
