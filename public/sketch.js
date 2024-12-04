@@ -13,6 +13,8 @@ let currentFlower = null; // 当前正在放置的花朵
 let isFlowerPlanted = false; // 标记是否已经固定花朵
 let spanning = false;
 let canPlant = false;
+
+let opacity =255;
 let bee = {
   x: 0,
   y: 200,
@@ -98,18 +100,18 @@ function createNewFlower(data) {
   flower.frequency=random(0.5,0.8);
   flower.canDraw = true;
   flower.size = 1;
+  flower.barrage = {
+  text: `${flower.name}: ${flower.message}`,
+  x: flower.x,
+  y: flower.y,
+  };
   if(flower.ifplanted == true)
   {
     flower.x =data.x;
     flower.y =data.y;
   }
   else{currentFlower=flower;}
-  flower.barrage = {
-  text: `${flower.name}: ${flower.message}`,
-  x: flower.x,
-  y: flower.y - 30,
-  opacity: 255,
-  };
+
   flower.canDraw = true;
   flower.draw = function () 
   {
@@ -229,17 +231,17 @@ if (socketInitialized) {
       if (currentTime - lastBarrageTime >= barrageCooldown) {
         // 发射弹幕
         if (flower.size == 2) {
-          fill(255, 255, 255, flower.barrage.opacity);
+          fill(255, 255, 255, opacity);
           noStroke();
           textAlign(CENTER);
           text(flower.barrage.text, flower.barrage.x, flower.barrage.y);
 
           // 弹幕逐渐上升并淡出
-          flower.barrage.y -= 1;
-          flower.barrage.opacity -= 2;
+          flower.barrage.y -= 0.001;
+          opacity -= 0.002;
 
           // 移除淡出完成的弹幕
-          if (flower.barrage.opacity <= 0) {
+          if (opacity <= 0) {
             flower.barrage = null;
           }
         }
