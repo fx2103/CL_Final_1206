@@ -145,5 +145,12 @@
     "x": 186,
     "y": 485,
     "ifplanted": true
+  },
+  {
+    "name": "撒",
+    "message": "阿达",
+    "x": 392,
+    "y": 232,
+    "ifplanted": true
   }
 ]
