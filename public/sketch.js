@@ -11,6 +11,7 @@ let bgImage;
 let currentFlower = null; // 当前正在放置的花朵
 let isFlowerPlanted = false; // 标记是否已经固定花朵
 let spanning = false;
+let canPlant = false;
 
 function preload() {
   bgImage = loadImage('https://cdn.glitch.global/8c93b6c9-9dc6-4089-8240-b26b2c58c581/pots_v05.png?v=1730724313078');
@@ -26,7 +27,7 @@ function setup() {
     socket = window.socket;
     socket.on('msg', (data) => {
       createNewFlower(data);    
-      
+            canPlant = true;
     });
  
     socket.on('initialFlowers', (data) => {
@@ -35,6 +36,7 @@ function setup() {
       createNewFlower(data);  
       
       socketInitialized = true;
+
     });
   } else {
     console.error("Socket is not defined. Ensure app.js is loaded before sketch.js.");
@@ -131,9 +133,9 @@ function draw() {
         flower.x = mouseX;
         flower.y = mouseY;
         currentFlower = flower;
-        console.log("message is ",currentFlower.message);
+        //console.log("message is ",currentFlower.message);
       }
-    console.log(flower.ifplanted);
+    //console.log(flower.ifplanted);
 
       //
       
@@ -143,7 +145,7 @@ function draw() {
     let controlOffset = sway * 1.5; // Adjust the curvature amount
     let isFlowerPlanted = flower.ifplanted;
 
-         console.log(flower.frequency);
+         //console.log(flower.frequency);
     // 绘制花茎部分
     stroke(34, 139, 34);
     strokeWeight(6); // 增加花茎的粗细
@@ -303,6 +305,9 @@ function mousePressed() {
   //     break;
   //   }
   // }
+  
+  if(canPlant){
+     console.log(isFlowerPlanted+ " + "+currentFlower);
   if (!isFlowerPlanted&&currentFlower) {
     setTimeout(10);
     // Fix the flower's position
@@ -335,10 +340,12 @@ function mousePressed() {
       waterParticles = [];
     }, 5000);
   }
-  if (!isFlowerPlanted && currentFlower) {
-    currentFlower.position.x = mouseX;
-    currentFlower.position.y = mouseY;
+  // if (!isFlowerPlanted && currentFlower) {
+  //   currentFlower.position.x = mouseX;
+  //   currentFlower.position.y = mouseY;
+  // }
   }
+ 
 }
 
 // function mouseReleased() {

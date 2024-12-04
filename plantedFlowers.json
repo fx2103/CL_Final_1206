@@ -55,5 +55,45 @@
     "x": 617,
     "y": 383,
     "ifplanted": true
+  },
+  {
+    "x": 551,
+    "y": 390,
+    "ifplanted": true
+  },
+  {
+    "x": 612,
+    "y": 491,
+    "ifplanted": true
+  },
+  {
+    "x": 554,
+    "y": 700,
+    "ifplanted": true
+  },
+  {
+    "x": 583,
+    "y": 391,
+    "ifplanted": true
+  },
+  {
+    "x": 437,
+    "y": 371,
+    "ifplanted": true
+  },
+  {
+    "x": 640,
+    "y": 389,
+    "ifplanted": true
+  },
+  {
+    "x": 419,
+    "y": 376,
+    "ifplanted": true
+  },
+  {
+    "x": 642,
+    "y": 391,
+    "ifplanted": true
   }
 ]
