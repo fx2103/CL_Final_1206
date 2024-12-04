@@ -30,7 +30,10 @@ function setup() {
     });
  
     socket.on('initialFlowers', (data) => {
-      flowers = data; // Load initial flowers from server
+      
+      //flowers = data; // Load initial flowers from server
+      createNewFlower(data);  
+      
       socketInitialized = true;
     });
   } else {
