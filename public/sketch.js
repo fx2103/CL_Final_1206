@@ -110,6 +110,7 @@ function createNewFlower(data) {
   y: flower.y - 30,
   opacity: 255
   };
+  flower.canDraw = true;
   flower.draw = function () 
   {
     // 计算摆动角度和控制偏移量
@@ -137,6 +138,9 @@ function createNewFlower(data) {
     ellipse(0, -5*flower.size, 10*flower.size, 10*flower.size); // 变大底部花瓣
     fill(255, 215, 0);
     ellipse(0, -12.5*flower.size, 6*flower.size, 6*flower.size); // 增大花朵中心
+    if (typeof flower.draw !== 'function') {
+        console.error('Error: flower does not have a draw method:', flower);
+    }
     pop();
 };
   
@@ -170,10 +174,10 @@ function createNewFlower(data) {
 //     ellipse(0, -25, 12, 12); // 增大花朵中心
 //     pop();
 // };
-  flower.canDraw = true;
+  
 
   // if(flower.message!=undefined)
-  // {flowers.push(flower);
+  flowers.push(flower);
   // console.log("花朵创建入栈成功");
   // console.log(flower);}
 }
@@ -194,26 +198,20 @@ if (socketInitialized) {
       }
       flower.draw();
       
-  
-
-      // 显示花朵的名称和消息
-  if (dist(mouseX, mouseY, flower.x, flower.y) < 25) {
+      if (dist(mouseX, mouseY, flower.x, flower.y) < 25) {
         fill(255);
         noStroke();
         text(`${flower.name}: ${flower.message}`, flower.x, flower.y - 10);
       }
 
-
-  // 如果正在浇水，水壶会显示
-  if (watering) {
+      if (watering) {
     wateringCan.x = mouseX;
     wateringCan.y = mouseY;
 
     drawWateringCan(wateringCan.x, wateringCan.y, wateringCan.angle); // 绘制水壶
   }
 
-  // 模拟水滴粒子
-  if (pouring) {
+      if (pouring) {
     // 每一帧都生成水滴粒子
     createWaterParticles();
     updateWaterParticles();
@@ -248,14 +246,13 @@ if (socketInitialized) {
       }
     }
   }
-   
-  
-
-  if(spanning){
+    
+      if(spanning){
     span.x=mouseX;
     span.y=mouseY;
     drawShovel(span.x,span.y);
   }
+    }
   drawSprites(); // 通过 p5.play 的 drawSprites 来绘制所有精
   
   //bee
@@ -263,7 +260,7 @@ if (socketInitialized) {
       drawBee(bee.x, bee.y, bee.size, bee.wingAngle);
       updateBee();
   }
-}
+
 }
 }
 
