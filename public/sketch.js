@@ -15,11 +15,13 @@ let canPlant = false;
 let bee = {
   x: 0,
   y: 200,
-  size: 50,
+  size: 20,
   speed: 2,
   wingAngle: 0,
   wingFlapSpeed: 0.2,
   visible: true,
+  oscillationHeight:20,
+  oscillationSpeed: 0.05,
 };
 
 function preload() {
@@ -374,6 +376,18 @@ function mousePressed() {
   //   currentFlower.position.x = mouseX;
   //   currentFlower.position.y = mouseY;
   // }
+  
+  // Check if the bee is visible and the mouse is within its body
+  if (bee.visible && dist(mouseX, mouseY, bee.x, bee.y) < bee.size / 2) {
+    bee.visible = false; // Make the bee disappear
+    
+    // Reappear after 5 seconds
+    setTimeout(() => {
+      bee.visible = true;
+      bee.x = -bee.size; // Reset position
+      bee.y = random(50, height - 50); // Randomize y position
+    }, 5000);
+  }
  
 }
 
@@ -434,8 +448,9 @@ function drawWaterParticles() {
 
 function drawBee(x, y, size, wingAngle) {
   // Body
-  fill(255, 204, 0); // Yellow
-  ellipse(x, y, size, size * 0.9); // Oval body
+  stroke(0);
+  fill(255, 204, 0); 
+  ellipse(x, y, size, size * 0.9);
 
   // Stripes
   fill(0);
@@ -455,10 +470,10 @@ function drawBee(x, y, size, wingAngle) {
   ellipse(-size * 0.3, -size * 0.4, size * 0.6, size * 0.3); // Left wing
   pop();
 
-  // Face
+  // Eye
   fill(255);
-  ellipse(x + size * 0.5, y - size * 0.2, size * 0.48); // Eye
-  ellipse(x + size * 0.2, y - size * 0.2, size * 0.5); // Eye
+  ellipse(x + size * 0.5, y - size * 0.2, size * 0.48); 
+  ellipse(x + size * 0.2, y - size * 0.2, size * 0.5); 
   
   fill(0);
   ellipse(x + size * 0.6, y - size * 0.2, size * 0.1);
@@ -469,13 +484,18 @@ function updateBee() {
   // Move the bee across the canvas
   bee.x += bee.speed;
   bee.wingAngle = sin(frameCount * bee.wingFlapSpeed) * QUARTER_PI; // Flap wings
-
+  
+  //Oscillate
+  bee.y = 200 + sin(frameCount * bee.oscillationSpeed) * bee.oscillationHeight;
+  
   // Reset position if it goes off-screen
   if (bee.x - bee.size / 2 > width) {
     bee.x = -bee.size;
     bee.y = random(50, height - 50);
   }
 }
+
+//console.log(frameCount);
 
 function windowResized() {
   // 确保窗口尺寸变化时画布能适配
