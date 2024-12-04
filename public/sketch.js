@@ -68,11 +68,11 @@ function setup() {
 }
 
 function createNewFlower(data) {
-  console.log("get in the create correctly");
+  //console.log("get in the create correctly");
   let flower = createSprite(random(50, 350), random(200, 350), 20, 40); // 使用 p5.play 的 createSprite 创建花朵
   flower.name = data.name;
   flower.message = data.message;
-  console.log("the message is ",flower.message);
+  //console.log("the message is ",flower.message);
   flower.type = data.plant;
   flower.ifplanted = data.ifplanted;
   //flower.x=data.x;
