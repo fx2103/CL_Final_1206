@@ -38,6 +38,12 @@ function setup() {
       socketInitialized = true;
 
     });
+    
+    
+    socket.on('update', (data)=>{
+      console.log("newFlower" );
+      flowers.push(data);
+    })
   } else {
     console.error("Socket is not defined. Ensure app.js is loaded before sketch.js.");
   }

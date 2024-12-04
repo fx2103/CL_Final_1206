@@ -51,7 +51,7 @@ io.sockets.on('connection', function (socket) {
         console.log(data); // Log the complete data object
 
         const newFlower = {
-            id:socket.id,
+            id:data.id,
             name: data.name,
             message: data.message,                 // message should be 'msg'
             flowertype: data.flowerType,  // flowerType should be 'plant'
