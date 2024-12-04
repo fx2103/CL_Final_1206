@@ -21,7 +21,7 @@ let bee = {
   wingFlapSpeed: 0.2,
   visible: true,
   oscillationHeight:20,
-  oscillationSpeed: 0.05,
+  oscillationSpeed: 0.5,
 };
 let oscillationAngle = 0;
 let wingAnimationTime = 0;
@@ -492,8 +492,8 @@ function updateBee() {
   
   //Oscillate
   oscillationAngle += bee.oscillationSpeed;
-  bee.y = 200 + sin(oscillationAngle) * bee.oscillationHeight;
-  console.log(oscillationAngle + "+" + oscillationHeight)
+  bee.y = 200 + sin(oscillationAngle) * bee.oscillationHeight * 10;
+  //console.log(oscillationAngle + "+" + bee.oscillationHeight);
   
   // Reset position if it goes off-screen
   if (bee.x - bee.size / 2 > width) {
