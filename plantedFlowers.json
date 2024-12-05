@@ -148,37 +148,9 @@
   },
   {
     "name": "撒",
-    "message": "阿达",
-    "x": 392,
-    "y": 232,
-    "ifplanted": true
-  },
-  {
-    "name": "撒",
-    "message": "阿达",
-    "x": 134,
-    "y": 300,
-    "ifplanted": true
-  },
-  {
-    "name": "撒",
-    "message": "阿达",
-    "x": 1014,
-    "y": 318,
-    "ifplanted": true
-  },
-  {
-    "name": "撒",
     "message": "阿迪斯",
     "x": 721,
     "y": 319,
-    "ifplanted": true
-  },
-  {
-    "name": "撒",
-    "message": "阿达",
-    "x": 656,
-    "y": 322,
     "ifplanted": true
   }
 ]
