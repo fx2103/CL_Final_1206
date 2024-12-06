@@ -2,11 +2,10 @@
 <html lang="en">
   <head>
     <link rel="icon" href="data:,">
-
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="style.css" rel="stylesheet" />
-    <title>IMA Community Garden</title>
+    <title>IMA Community Garden - Welcome</title>
   </head>
   <body>
     <div id="welcomePage" class="page">
@@ -41,38 +40,50 @@
       </div>
     
       <!-- Enter Button -->
-      <button id="enterButton" disabled>ENTER</button>
-      <button id="visitorButton">Nan,just go to the garden</button>
-    </div>
-    
-
-    <!-- Main Page (Initially hidden) -->
-    <div class="container" id="mainPage" style="display: none;">
-      <div id="sketch-holder"></div>
+      <button id="enterButton" disabled>Plant My Flower</button>
+      <button id="visitorButton">Visit The Garden</button>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-    <script src="p5.play.js"></script>
-    <script src="planck.min.js"></script>
-    <script src="app.js"></script>
-    <script src="sketch.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
       const nameInput = document.getElementById('name-input');
       const msgInput = document.getElementById('msg-input');
       const plantDropDown = document.getElementById('dropdownMenu');
       const enterButton = document.getElementById('enterButton');
-      const visitorButton=document.getElementById('visitorButton');
+      const visitorButton = document.getElementById('visitorButton');
+
       // Check if all inputs are filled
       function checkInputs() {
         if (nameInput.value && msgInput.value && plantDropDown.value) {
-          enterButton.disabled = false; // Enable button if all fields are filled
+          enterButton.disabled = false;
         } else {
-          enterButton.disabled = true; // Keep it disabled otherwise
+          enterButton.disabled = true;
         }
       }
 
       // Listen for changes in the inputs
       nameInput.addEventListener('input', checkInputs);
-      msgInput.addEventListe
+      msgInput.addEventListener('input', checkInputs);
+      plantDropDown.addEventListener('change', checkInputs);
+
+      // Handle button clicks
+      enterButton.addEventListener('click', () => {
+        const data = {
+          name: nameInput.value,
+          message: msgInput.value,
+          plant: plantDropDown.value,
+          ifplanted: false,
+          x: 0,
+          y: 0
+        };
+        // Store data in localStorage to access it in the garden page
+        localStorage.setItem('gardenData', JSON.stringify(data));
+        window.location.href = 'garden.html';
+      });
+
+      visitorButton.addEventListener('click', () => {
+        window.location.href = 'garden.html';
+      });
+    </script>
+  </body>
+</html>

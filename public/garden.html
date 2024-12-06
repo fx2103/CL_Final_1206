@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="icon" href="data:,">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="style.css" rel="stylesheet" />
+    <title>IMA Community Garden</title>
+  </head>
+  <body>
+    <div class="container" id="mainPage">
+      <div id="sketch-holder"></div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="p5.play.js"></script>
+    <script src="planck.min.js"></script>
+    <script src="app.js"></script>
+    <script src="sketch.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        // Get the stored data
+        const storedData = localStorage.getItem('gardenData');
+        if (storedData) {
+          const data = JSON.parse(storedData);
+          // Wait for socket to be available
+          window.addEventListener('load', () => {
+            if (window.socket) {
+              window.socket.emit('msg', data);
+            }
+          });
+          // Clear the stored data
+          localStorage.removeItem('gardenData');
+        }
+      </script>
+  </body>
+</html> 

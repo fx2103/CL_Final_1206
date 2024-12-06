@@ -25,6 +25,10 @@ let bee = {
   visible: true,
   oscillationHeight:20,
   oscillationSpeed: 0.5,
+  normalSpeed: 2,
+  boostSpeed: 6,
+  boosted: false,
+  boostDuration: 3000
 };
 let oscillationAngle = 0;
 let wingAnimationTime = 0;
@@ -35,9 +39,6 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight).parent('sketch-holder');
-  let sprite = createSprite(400, 300, 50, 50);
-  sprite.shapeColor = color(255, 0, 0);
-  //world.gravity.y = 9.8;
   image(bgImage, 0, 0, width, height);
   
     
@@ -72,7 +73,7 @@ function setup() {
       watering = true;
     }, 50);
   });
-  let button2 = createButton('spanning');
+  let button2 = createButton('Remove flower');
   button2.position(150, 10);
   button2.mousePressed(() => {
     // 显示水壶
@@ -82,6 +83,18 @@ function setup() {
       // 延迟 50ms 后允许浇水
       spanning = true;
     }, 50);
+  });
+  let button3 = createButton('Replant');
+  button3.position(335, 10);
+  button3.mousePressed(() => {
+    // Clear any existing socket data
+    if (window.socket) {
+      window.socket.disconnect();
+    }
+    // Clear local storage
+    localStorage.removeItem('gardenData');
+    // Redirect to index.html
+    window.location.href = '/index.html';
   });
 }
 
@@ -115,34 +128,33 @@ function createNewFlower(data) {
   flower.canDraw = true;
   flower.draw = function () 
   {
-    // 计算摆动角度和控制偏移量
-    let sway = sin(frameCount *flower.frequency + flower.x * 0.1) * flower.force; // Subtle sway angle (increase sway effect)
-    let controlOffset = sway * 1.5; // Adjust the curvature amount
-    //let isFlowerPlanted = flower.ifplanted;
-         //console.log(flower.frequency);
-    // 绘制花茎部分
+    // Calculate sway
+    let sway = sin(frameCount * flower.frequency + flower.x * 0.1) * flower.force;
+    let controlOffset = sway * 1.5;
+
+    // Draw stem
     stroke(34, 139, 34);
-    strokeWeight(6); // 增加花茎的粗细
+    strokeWeight(6);
     noFill();
     beginShape();
     vertex(0, 0); // Bottom of the stem
-    quadraticVertex(controlOffset, -30, sway, -60); // Curve control and top point (increased length)
+    quadraticVertex(controlOffset, -30, sway, -60);
     endShape();
 
-    // 绘制花瓣部分
+    // Draw flower petals - Adjusted position to match stem end point
     noStroke();
     fill(255, 182, 193);
     push();
-    translate(sway, -30*flower.size); // 调整花瓣的高度
-    ellipse(-10*flower.size, -10*flower.size, 10*flower.size, 10*flower.size); // 增加花瓣的大小
-    ellipse(10*flower.size, -10*flower.size, 10*flower.size, 10*flower.size);
-    ellipse(0, -20*flower.size, 12.5*flower.size, 12.5*flower.size); // 变大中心花瓣
-    ellipse(0, -5*flower.size, 10*flower.size, 10*flower.size); // 变大底部花瓣
+    translate(sway, -60); // Changed from -30*flower.size to -60 to match stem endpoint
+    // Adjust all Y positions to center around the stem endpoint
+    ellipse(-10*flower.size, 0, 10*flower.size, 10*flower.size);
+    ellipse(10*flower.size, 0, 10*flower.size, 10*flower.size);
+    ellipse(0, -10*flower.size, 12.5*flower.size, 12.5*flower.size);
+    ellipse(0, 5*flower.size, 10*flower.size, 10*flower.size);
     fill(255, 215, 0);
-    ellipse(0, -12.5*flower.size, 6*flower.size, 6*flower.size); // 增大花朵中心
-
+    ellipse(0, -2.5*flower.size, 6*flower.size, 6*flower.size);
     pop();
-};
+  };
   
   
   // 将绘制逻辑直接添加到 flower 的 draw 方法中
@@ -198,10 +210,20 @@ if (socketInitialized) {
       }
       flower.draw();
       
-      if (dist(mouseX, mouseY, flower.x, flower.y) < 25) {
-        fill(255);
+      if (dist(mouseX, mouseY, flower.x, flower.y) < 35) {
+        // Draw white background for text
+        fill(255, 245, 245, 230);
         noStroke();
-        text(`${flower.name}: ${flower.message}`, flower.x, flower.y - 10);
+        rectMode(LEFT);
+        let textPadding = 10;
+        let messageWidth = textWidth(`${flower.name}: ${flower.message}`) + textPadding * 2;
+        let messageHeight = 30;
+        rect(flower.x + 5, flower.y - 30, messageWidth, messageHeight, 8);
+        
+        // Draw text
+        fill(0);
+        textAlign(LEFT, CENTER);
+        text(`${flower.name}: ${flower.message}`, flower.x + 15, flower.y - 15);
       }}
 
       if (watering) {
@@ -220,11 +242,45 @@ if (socketInitialized) {
       let particle = waterParticles[i];
       for (let flower of flowers) {
         if (dist(particle.x, particle.y, flower.x, flower.y) < 30) {
-          // 让花朵生长
-          flower.size = (flower.size || 1) + 0.001; // 增长花朵的大小
-          flower.size = min(flower.size, 2); // 限制最大大小为2倍
-          flower.frequency +=0.0001;
-          waterParticles.splice(i, 1); // 移除水滴
+          // Let the flower grow
+          flower.size = (flower.size || 1) + 0.001; // Increase size gradually
+          flower.size = min(flower.size, 2); // Limit maximum size to 2x
+          flower.frequency += 0.001; // Increased from 0.0001 to 0.001 for faster swaying
+          flower.frequency = min(flower.frequency, 2); // Add a limit to prevent too fast swaying
+          
+          // Add height growth as the flower grows
+          let heightGrowth = map(flower.size, 1, 2, 0, 40); // Maps size 1-2 to height 0-40
+          
+          // Update the flower's draw function to include the new height
+          flower.draw = function () {
+            let sway = sin(frameCount * flower.frequency + flower.x * 0.1) * flower.force;
+            let controlOffset = sway * 1.5;
+            let stemHeight = -60 - heightGrowth;
+
+            // Draw stem
+            stroke(34, 139, 34);
+            strokeWeight(6);
+            noFill();
+            beginShape();
+            vertex(0, 0);
+            quadraticVertex(controlOffset, stemHeight/2, sway, stemHeight);
+            endShape();
+
+            // Draw flower petals at new height
+            noStroke();
+            fill(255, 182, 193);
+            push();
+            translate(sway, stemHeight);
+            ellipse(-10*flower.size, 0, 10*flower.size, 10*flower.size);
+            ellipse(10*flower.size, 0, 10*flower.size, 10*flower.size);
+            ellipse(0, -10*flower.size, 12.5*flower.size, 12.5*flower.size);
+            ellipse(0, 5*flower.size, 10*flower.size, 10*flower.size);
+            fill(255, 215, 0);
+            ellipse(0, -2.5*flower.size, 6*flower.size, 6*flower.size);
+            pop();
+          };
+          
+          waterParticles.splice(i, 1);
           let currentTime = millis();
 
           const barrageCooldown = 500;
@@ -279,40 +335,40 @@ function drawShovel(x, y) {
   push();
   translate(x, y);
   rotate(240);
-  // 绘制铲头（尖头铲，强调钢铁材质和尖锐形状）
-  fill(180, 180, 180);  // 金属灰
+  scale(0.5);
+
+  // Draw shovel head
+  fill(180, 180, 180);
   stroke(100, 100, 100);
   strokeWeight(4);
-  
-  // 绘制尖头铲的三角形头部
   beginShape();
-  vertex(0, -80);     // 尖头的顶点
-  vertex(60, 40);     // 右下角
-  vertex(-60, 40);    // 左下角
+  vertex(0, -80);
+  vertex(60, 40);
+  vertex(-60, 40);
   endShape(CLOSE);
 
-  // 绘制铲柄（一体设计，与铲头连接）
-  fill(150, 150, 150);  // 稍暗的金属色
-  rect(-10, 40, 20, 180); // 铲柄的矩形，连接铲头
+  // Draw shovel handle
+  fill(150, 150, 150);
+  rect(-10, 40, 20, 180);
 
-  // 末端的细节部分
+  // Draw handle end
   fill(100, 100, 100);
   beginShape();
-  vertex(-15, 220);  // 铲柄底部
-  vertex(15, 220);   // 铲柄底部
-  vertex(30, 240);   // 向下延伸部分
-  vertex(-30, 240);  // 向下延伸部分
+  vertex(-15, 220);
+  vertex(15, 220);
+  vertex(30, 240);
+  vertex(-30, 240);
   endShape(CLOSE);
 
-  // 绘制铲柄握持区域的防滑纹理（简化的线条）
+  // Draw handle grip texture
   stroke(50, 50, 50);
   strokeWeight(3);
-  line(-8, 60, -8, 100); // 防滑纹理1
-  line(8, 60, 8, 100);   // 防滑纹理2
-  line(-8, 120, -8, 160); // 防滑纹理3
-  line(8, 120, 8, 160);   // 防滑纹理4
-  line(-8, 180, -8, 200); // 防滑纹理5
-  line(8, 180, 8, 200);   // 防滑纹理6
+  line(-8, 60, -8, 100);
+  line(8, 60, 8, 100);
+  line(-8, 120, -8, 160);
+  line(8, 120, 8, 160);
+  line(-8, 180, -8, 200);
+  line(8, 180, 8, 200);
 
   pop();
 }
@@ -329,7 +385,7 @@ function drawWateringCan(x, y, angle) {
   strokeWeight(2);
   ellipse(0, 0, 80, 60); // 缩小后的茶壶主体
 
-  // 绘制茶壶的渐变效果
+  // 绘制壶的渐变效果
   let gradient = drawingContext.createRadialGradient(0, 0, 30, 0, 0, 60);
   gradient.addColorStop(0, 'rgba(255, 220, 185, 1)');
   gradient.addColorStop(1, 'rgba(200, 150, 100, 1)');
@@ -343,7 +399,7 @@ function drawWateringCan(x, y, angle) {
   bezierVertex(50, -40, 60, 10, 40, 10); // 使用贝塞尔曲线来画弯曲的壶嘴
   endShape(CLOSE);
 
-  // 茶壶把手：更小的椭圆形把手
+  // 茶壶把手：小的椭圆形把手
   fill(255, 220, 185); // 颜色稍深一些
   stroke(200, 150, 100);
   strokeWeight(6);
@@ -353,7 +409,7 @@ function drawWateringCan(x, y, angle) {
   arc(-45, -5, 15,25 , 5*PI / 12, -4*PI / 12); // 更大的弧度，调整大小和角度
   endShape();
 
-  // 茶壶壶盖：圆顶，带有小把手
+  // 茶壶壶盖：���顶，带有小把手
   fill(255, 220, 185); // 壶盖的颜色可以和主体相同
   strokeWeight(4);
   ellipse(0, -30, 50, 13); // 缩小后的壶盖
@@ -364,6 +420,42 @@ function drawWateringCan(x, y, angle) {
 }
 
 function mousePressed() {
+  // For planting flowers
+  if (currentFlower && !currentFlower.ifplanted) {
+    currentFlower.x = mouseX;
+    currentFlower.y = mouseY;
+    currentFlower.ifplanted = true;
+    socket.emit('update', {
+      name: currentFlower.name,
+      message: currentFlower.message,
+      flowertype: currentFlower.type,
+      x: currentFlower.x,
+      y: currentFlower.y,
+      ifplanted: true
+    });
+    currentFlower = null; // Reset current flower after planting
+  }
+
+  // Rest of mousePressed code...
+  if (watering && !pouring) {
+    wateringCan.angle = 1.2;
+    setTimeout(() => {
+      pouring = true;
+      createWaterParticles();
+    }, 10);
+    
+    setTimeout(() => {
+      createWaterParticles();
+    }, 300);
+
+    setTimeout(() => {
+      watering = false;
+      pouring = false;
+      waterParticles = [];
+      wateringCan.angle = 0;
+    }, 5000);
+  }
+
   // 判断鼠标是否点击到某朵花朵，开始拖拽
   // for (let flower of flowers) {
   //   if (dist(mouseX, mouseY, flower.x, flower.y) < 25) {
@@ -390,26 +482,25 @@ function mousePressed() {
   }
   }
   if (watering && !pouring) {
-    // 点击后，开始浇水
-    wateringCan.angle = 0.5;
+    // Increase tilt angle when starting to pour
+    wateringCan.angle = 26; // Increased from 0.8 to 1.2 for more tilt
     setTimeout(() => {
       pouring = true;
-      createWaterParticles(); // 开始生成水滴
+      createWaterParticles();
     }, 10);
     
-     // 倾斜水壶
     setTimeout(() => {
-      // 持续生成水滴粒子
       createWaterParticles();
     }, 300);
 
     setTimeout(() => {
-      // 1秒后停止浇水并隐藏水壶
       watering = false;
       pouring = false;
       waterParticles = [];
+      wateringCan.angle = 0; // Reset angle when done
     }, 5000);
   }
+  
   // if (!isFlowerPlanted && currentFlower) {
   //   currentFlower.position.x = mouseX;
   //   currentFlower.position.y = mouseY;
@@ -417,14 +508,18 @@ function mousePressed() {
   
   // Check if the bee is visible and the mouse is within its body
   if (bee.visible && dist(mouseX, mouseY, bee.x, bee.y) < bee.size / 2) {
-    bee.visible = false; // Make the bee disappear
-    
-    // Reappear after 5 seconds
-    setTimeout(() => {
-      bee.visible = true;
-      bee.x = -bee.size; // Reset position
-      bee.y = random(50, height - 50); // Randomize y position
-    }, 5000);
+    if (!bee.boosted) {
+      bee.boosted = true;
+      bee.speed = bee.boostSpeed;
+      bee.wingFlapSpeed *= 2.6;  // Double wing flap speed when boosted
+      
+      // Reset speed after boost duration
+      setTimeout(() => {
+        bee.boosted = false;
+        bee.speed = bee.normalSpeed;
+        bee.wingFlapSpeed /= 2;  // Reset wing flap speed
+      }, bee.boostDuration);
+    }
   }
  
 }
@@ -456,7 +551,7 @@ function createWaterParticles() {
       vx: vx,
       vy: vy,
       size: random(4, 6), // 增加水滴的大小
-      life: 60 // 生命周期（帧数）
+      life: 60 // 生命周期帧数）
     };
     waterParticles.push(particle);
   }
@@ -541,6 +636,6 @@ function updateBee() {
 
 
 function windowResized() {
-  // 确保窗口尺寸变化时画布能适配
+  // 确保窗口尺寸变化画布能适配
   resizeCanvas(windowWidth, windowHeight);
 }

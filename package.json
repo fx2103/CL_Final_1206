@@ -8,13 +8,14 @@
   },
   "author": "",
   "license": "ISC",
-  "description": "",
   "engines": {
     "node": "16.x"
   },
   "dependencies": {
-    "express": "^4.21.1",
+    "express": "^4.21.2",
     "lowdb": "^6.1.1",
     "socket.io": "^4.3.1"
-  }
+  },
+  "keywords": [],
+  "description": ""
 }
